@@ -2,22 +2,17 @@
 #include <pthread.h>
 
 int global_counter = 20;
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void *thread_routine(void *arg) {
     for (size_t i = 0; i < 1000; i++) {
-        pthread_mutex_lock(&mutex);
         global_counter++;
-        pthread_mutex_unlock(&mutex);
     }
     return NULL;
 }
 
 void *thread_routine_two(void *arg) {
     for (size_t i = 0; i < 1000; i++) {
-        pthread_mutex_lock(&mutex);
         global_counter--;
-        pthread_mutex_unlock(&mutex);
     }
     return NULL;
 }
@@ -33,9 +28,7 @@ int main(void) {
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
 
-    printf("Valor final de global_counter con sincronizacion - mutex: %d\n", global_counter);
-
-    pthread_mutex_destroy(&mutex);
+    printf("Valor final de global_counter sin sincronizacion: %d\n", global_counter);
 
     return 0;
 }
